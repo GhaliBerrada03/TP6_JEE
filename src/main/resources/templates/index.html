@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Portail de Gestion Clients</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+    <style>
+        :root {
+            --brand: #2563eb;
+            --brand-hover: #1d4ed8;
+            --surface: #f8fafc;
+            --text-main: #1e293b;
+            --line: #cbd5e1;
+            --alert: #ef4444;
+            --alert-hover: #dc2626;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--surface);
+            color: var(--text-main);
+            margin: 0;
+            padding: 3rem;
+        }
+        .app-shell {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px solid var(--surface);
+            padding-bottom: 1.5rem;
+        }
+        h1 { margin: 0; font-size: 1.5rem; font-weight: 700; color: #0f172a; }
+        .action-btn {
+            background-color: var(--brand);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .action-btn:hover { background-color: var(--brand-hover); box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }
+        
+        .data-grid {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .data-grid th {
+            text-align: left;
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--line);
+        }
+        .data-grid td {
+            padding: 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.95rem;
+        }
+        .row-actions {
+            display: flex;
+            gap: 1.25rem;
+        }
+        .lnk-edit { color: var(--brand); text-decoration: none; font-weight: 600; }
+        .lnk-del { color: var(--alert); text-decoration: none; font-weight: 600; }
+        .lnk-edit:hover, .lnk-del:hover { text-decoration: underline; opacity: 0.8; }
+        
+        .no-data { text-align: center; padding: 5rem 0; color: #94a3b8; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <div class="top-bar">
+            <h1>Répertoire des Clients</h1>
+            <a href="/nouveau-client" class="action-btn">Nouveau Client</a>
+        </div>
+
+        <div th:switch="${clients}">
+            <div th:case="null" class="no-data">
+                <p>Aucun client n'est actuellement répertorié dans le système.</p>
+            </div>
+            <div th:case="*">
+                <table class="data-grid">
+                    <thead>
+                        <tr>
+                            <th>Nom & Prénom</th>
+                            <th>Courriel Contact</th>
+                            <th>Opérations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="clt : ${clients}">
+                            <td th:text="${clt.nom}">--</td>
+                            <td th:text="${clt.courriel}">--</td>
+                            <td class="row-actions">
+                                <a th:href="@{/modifier-client/{id}(id=${clt.id})}" class="lnk-edit">Éditer</a>
+                                <a th:href="@{/effacer/{id}(id=${clt.id})}" class="lnk-del">Retirer</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
